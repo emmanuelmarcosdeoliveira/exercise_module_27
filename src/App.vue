@@ -1,137 +1,89 @@
 <script setup>
-import {reactive} from 'vue';
-const description = "Exercício Vue.js Calculadora Aritmética"
-const image = "https://png.pngtree.com/png-vector/20190803/ourlarge/pngtree-calculator-calculation-math-progress-graph-flat-color-icon-v-png-image_1648951.jpg"
-const imageCheck  = "https://media.istockphoto.com/id/1204658131/pt/vetorial/green-tick-and-confirm-icon-vector-design.jpg?s=612x612&w=0&k=20&c=kdV77-mv6KmDStWhg3atx2NxH-kt1i0vTFhvSJSWvww=";
-
-const iamgeError = "https://media.istockphoto.com/id/1152189152/pt/vetorial/red-alert-icon.jpg?s=612x612&w=0&k=20&c=lG4TvBvOnp6cAWl3A0cJk2Krt_7rtvFBcyfiVl_MJTk="
-
-const exibeImagem  = true;
-const certo = true;
-const errado = false;
+import { reactive } from 'vue';
+import Cabecalho from "./components/Cabecalho.vue"
 
 const estado = reactive({
-  contador: 0,
-  email: " ",
-  saldo: 5000,
-  transferindo: 0,
-  primeiroNumero: " ",
-  segundoNumero: " ",
-}) 
+  primeiroNumero: "",
+  segundoNumero: "",
+  tipoDeOperacao: '+',
+})
 
-function incrementar() {
-  estado.contador ++
-}
-function decrementar() {
-  estado.contador --
-}
-
-
-
-
-
-function incluiEmail(evento){
-estado.email = evento.target.value;
-}
-function saldoFuturo(){
-  const {saldo, transferindo} = estado
-  return saldo - transferindo
-}
-function validaValorTransf() {
-  const {saldo, transferindo} = estado
-  return saldo >= transferindo
-}
-
-
-
-function incluiPrimeiroNumero(evento){
-  estado.primeiroNumero = evento.target.value;
-} 
-
-function incluiSegundoNumero(evento){
-  estado.segundoNumero = evento.target.value;
-} 
-
-
-function somar() {
-  const {primeiroNumero, segundoNumero}  = estado
-  return primeiroNumero + segundoNumero;
-}
-function subtrair() {
-  const {primeiroNumero, segundoNumero}  = estado
-  return primeiroNumero - segundoNumero;
-}
-function dividir() {
-  const {primeiroNumero, segundoNumero}  = estado
-  return primeiroNumero / segundoNumero;
-}
-function multiplicar() {
-  const {primeiroNumero, segundoNumero}  = estado
-  return primeiroNumero * segundoNumero;
-}
-
-
-
-
-
+const resultado = () => {
+  const { tipoDeOperacao } = estado
+  switch (tipoDeOperacao) {
+    case '-':
+      return parseFloat(estado.primeiroNumero) - parseFloat(estado.segundoNumero);
+    case '/':
+      return parseFloat(estado.primeiroNumero) / parseFloat(estado.segundoNumero)
+    case '*':
+      return  parseFloat(estado.primeiroNumero) * parseFloat(estado.segundoNumero);
+    default:
+      return parseFloat(estado.primeiroNumero) + parseFloat(estado.segundoNumero);
+  }
+}  
+{{estado.primeiroNumero.value}}
 </script>
 
 <template>
-  <form>
-    <img v-show="exibeImagem" :src="image" alt="Calculadora Aritmética">
-    <h1>{{ description }}</h1>
-    <!-- Inputs -->
-    <p>{{ estado.primeiroNumero }}</p>
-    <input @keyup="incluiPrimeiroNumero" type="number" name="" id="" placeholder="Insira um Numero"> 
-    <p>{{ estado.segundoNumero }}</p>
-    <input @keyup="incluiSegundoNumero" type="number" name="" id="" placeholder="Inira outro Numero">
-    <input type="number" name="" id="" placeholder="Resultado">
-    
-    <img v-if="certo" :src="imageCheck" alt="Corect">
-    <img v-else-if="errado" :src="iamgeError" alt="Error">
-    <h2  v-else>Está faltando algo☹️</h2>
-  </form>
-  <br>
-  <hr>
-  <h1>{{ estado.contador }}</h1>
-  <button @click="incrementar" type:button>+</button>
-  <button @click="decrementar" type:button>-</button>
-  <br>
-  <hr>
-<h1>{{ estado.email }}</h1>
-<input type="email" @keyup="incluiEmail" name="" id="" placeholder="e-mail">
-<br>
-<br>
-<hr>
-Saldo: {{ estado.saldo }} 
-<br>
-Trasnferindo: {{ estado.transferindo }} 
-<br>
-<input class="campo" :class="{invalido: !validaValorTransf()}" @keyup="evento => estado.transferindo = evento.target.value  " type="number" name="" id="" placeholder="Quantia para transferir"> <br>
-Saldo Após transferencia:  {{ saldoFuturo() }}
+  <div class="container">
+    <Cabecalho />
+    <!-- Formulário -->
+    <form class="border  rounded-2 p-4 bg-info-subtle">
+      <div class="row  d-flex justify-content-center">
+        <div class="col-md-2">
+         
+          <label for="" class="">Insira um Número</label>
+          <input @keyup="evento => estado.primeiroNumero = evento.target.value"
+          class="form-control" type="number" name="" id="" placeholder="Insira um Numero">
+        </div>
 
-<h2>Insira um numero: {{ estado.primeiroNumero }}</h2>
+        <div class="col-md-1">
+          <select @change="evento => estado.tipoDeOperacao = evento.target.value" class="form-control mt-4">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+          </select>
+        </div>
+       
+        <!-- Input primeiro Numero -->
+        <div class="col-md-2">
+         <label class="for-control" for="">Insira um Número</label>
+          <input @keyup="evento => estado.segundoNumero = evento.target.value" class="form-control" type="number" name="" id="" placeholder="Inira outro Numero">
+        </div>
+
+        <!-- Input "=" -->
+        <div class="col-md-1">
+         
+          <input class="form-control mt-4" type="text" name="" id="" placeholder="=">
+        </div>
+
+        <!-- Input Segundo Numero -->
+        <div class="col-md-2 meuResultado ">
+       
+       <span  v-if="estado.primeiroNumero && estado.segundoNumero !='' ">{{ resultado().toFixed(2) }} </span>
+       <span v-else>Digite os valores para ver o Resultado</span>
+        </div>
+      </div>
+    </form>
 
 
+  </div>
 </template>
 
 <style scoped>
-img {
-  max-width: 150px;
+::placeholder, option {
+  text-align: center;
+  font-size: 12px;
+}
+.meuResultado {
+  margin-top: 22px;
+  font-size: 24px;
+}
+span {
   display: block;
+  font-size: 0.75rem;
+  text-wrap: nowrap;
+  padding-top: 10px;
 }
-
-.invalido {
-  outline-color: red;
-  border-color: red;
-}
-.campo {
-  background: yellowgreen;
-}
-
-input {
-  display: block;
-}
-
-
 </style>
