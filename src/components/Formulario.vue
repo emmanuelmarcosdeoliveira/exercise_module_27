@@ -38,8 +38,8 @@ const props = defineProps(['num1', 'num2', 'tipoDeOperacao', 'resultado'  ])
         <!-- Input Segundo Numero -->
         <div class="col-md-2 meuResultado ">
        
-          <span v-if="props.num1 || pros.num2 === ''">Digite os valores para ver o Resultado</span>
-       <span  v-else-if="props.num1 && props.num2 !== '' ">{{props.resultado}} </span>
+          <span  v-if="props.num1 && props.num2 !== '' ">{{props.resultado}} </span>
+          <span v-else-if="props.num1 || pros.num2 === ''">Digite os valores para ver o Resultado</span>
         </div>
       </div>
     </form>
