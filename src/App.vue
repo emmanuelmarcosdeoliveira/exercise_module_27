@@ -4,8 +4,8 @@ import Cabecalho from "./components/Cabecalho.vue"
 import Formulario from './components/Formulario.vue'
 
 const estado = reactive({
-  primeiroNumero: "",
-  segundoNumero: "",
+  primeiroNumero: 0,
+  segundoNumero:  0,
   tipoDeOperacao: '+',
 })
 
